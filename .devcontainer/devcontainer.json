@@ -1,0 +1,58 @@
+{
+	"name": "base-devcontainer",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"runArgs": [
+		"--env-file",
+		".devcontainer/env_files/devcontainer.env",
+		"--name",
+		"base-devcontainer"
+	],
+	// 👇 Features to add to the Dev Container. More info: https://containers.dev/implementors/features.
+	// "features": {},
+	// 👇 Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// 👇 Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "zsh -i /home/vscode/scripts/postCreateCommand.sh",
+	"mounts": [
+		// "source=${localEnv:HOME}/.config/gcloud/services_account,target=/home/vscode/.config/gcloud/services_account,type=bind,consistency=cached" // UNIX BASED
+		"source=${localEnv:USERPROFILE}\\.config\\gcloud\\services_account,target=/home/vscode/.config/gcloud/services_account,type=bind,consistency=cached" // WINDOWS BASED
+	],
+	// 👇 Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"ms-python.black-formatter",
+				"ms-python.flake8",
+				"waderyan.gitblame",
+				"donjayamanne.git-extension-pack",
+				"GitHub.copilot",
+				"GitHub.vscode-pull-request-github",
+				"codezombiech.gitignore",
+				"ms-python.isort",
+				"ms-python.vscode-pylance",
+				"ms-python.pylint",
+				"ms-python.debugpy",
+				"Vue.volar",
+				"fabiospampinato.vscode-monokai-night"
+			],
+			"settings": {
+				"terminal.integrated.fontFamily": "MesloLGS NF",
+				"workbench.iconTheme": "vscode-icons",
+				"workbench.colorTheme": "Monokai Night",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/usr/bin/zsh"
+					}
+				}
+			}
+		},
+		"features": {},
+		// 👇 Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+		"remoteUser": "root"
+	}
+}

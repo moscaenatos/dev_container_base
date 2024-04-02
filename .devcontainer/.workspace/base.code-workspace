@@ -1,0 +1,118 @@
+{
+    "folders": [
+        {
+            "path": "/home/vscode/repos/repo1/folder1",
+            "name": "folder1"
+        },
+        {
+            "path": "/home/vscode/repos/repo1/capi-connector",
+            "name": "capi-connector"
+        },
+        {
+            "path": "/home/vscode/repos/repo2",
+            "name": "repo2"
+        },
+      
+      
+       
+    ],
+    "extensions": {},
+    "settings": {
+        "python.defaultInterpreterPath": "/home/vscode/repos/repo1/.venv/bin/python",
+    },
+    "launch": {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Python: folder1",
+                "type": "python",
+                "request": "launch",
+                "module": "functions_framework",
+                "consoleTitle": "folder1",
+                "args": [
+                    "--target",
+                    "listen",
+                    "--debug",
+                    "--port",
+                    "8081"
+                ],
+                "cwd": "${workspaceFolder:folder1}/src",
+                "env": {
+                    "GOOGLE_APPLICATION_CREDENTIALS": "${userHome}/.config/gcloud/services_account/service_account_1.json",
+                    "ENVIRONMENT": "local",
+                    "GCP_PROJECT": "development",
+                    "FOLDER_2_ENTRYPOINT": "http://localhost:8082",
+                },
+            },
+            {
+                "name": "Python: folder2",
+                "type": "python",
+                "request": "launch",
+                "module": "functions_framework",
+                "args": [
+                    "--target",
+                    "entrypoint",
+                    "--debug",
+                    "--port",
+                    "8082"
+                ],
+                "consoleTitle": "folder2",
+                "cwd": "${workspaceFolder:folder2}/src",
+                "env": {
+                    "GOOGLE_APPLICATION_CREDENTIALS": "${userHome}/.config/gcloud/services_account/service_account_2.json",
+                    "ENVIRONMENT": "local",
+                    "FOLDER_1_ENTRYPOINT": "http://localhost:8081",
+                    "GCP_PROJECT": "development",
+                    "ENTRYPOINT_USERNAME": "ENTRYPOINT_USERNAME_REPO_1",
+                    "ENTRYPOINT_PASSWORD": "ENTRYPOINT_PASSWORD_REPO_1",
+                },
+            },
+            {
+                "type": "chrome",
+                "request": "launch",
+                "name": "Launch: repo2",
+                "url": "http://localhost:8080/iframeChatbot",
+                "webRoot": "${workspaceFolder:repo2}/src",
+                "sourceMapPathOverrides": {
+                    "webpack://chat-bot-t2/./src/*": "${webRoot}/*"
+                },
+                "env": {
+                    "VUE_APP_ENVIRONMENT": "local",
+                    "FOLDER_2_URL": "http://localhost:8082",
+                    "ENTRYPOINT_URL": "http://localhost:8080",
+                },
+                "preLaunchTask": "build and start repo2",
+            },
+           
+        ],
+        "compounds": [
+            {
+                "name": "Test e2e",
+                "configurations": [
+                    "Python: folder2",
+                    "Python: folder1",
+                    "Launch: repo2"
+                ]
+            },
+          
+        ],
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "build and start WebChat",
+                "type": "shell",
+                "command": "/bin/zsh -ic 'cd ${workspaceFolder:repo2}; nvm use;npm install; npm run build; npm run replace-url; npm run start'",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+            },
+           
+        ]
+    }
+}
